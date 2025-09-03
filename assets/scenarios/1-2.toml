@@ -1,0 +1,63 @@
+# TOML
+
+[meta]
+author = "miu"
+date = "2025-01-01"
+title = "1-2"
+description = "second step"
+
+[scenario]
+randomize = false
+
+[[scenario.lines]]
+prompt = "$"
+command = "uname -n"
+output = '''
+db-server
+'''
+
+[[scenario.lines]]
+prompt = "$"
+command = "su - postgres"
+output = '''
+'''
+
+[[scenario.lines]]
+prompt = "$"
+command = "pg_ctl status"
+output = '''
+pg_ctl: server is running (PID: 12903)
+'''
+
+[[scenario.lines]]
+prompt = "$"
+command = "psql -x -c 'SELECT * FROM pg_stat_replication'"
+output = '''
+-[ RECORD 1 ]----+------------------------------
+pid              | 23960
+usesysid         | 10
+usename          | fsep
+application_name | disaster_primary
+client_addr      | 192.0.2.212
+client_hostname  |
+client_port      | 50832
+backend_start    | 2017-11-01 16:49:47.320528+09
+backend_xmin     |
+state            | streaming
+sent_lsn         | 0/3000300
+write_lsn        | 0/3000300
+flush_lsn        | 0/3000300
+replay_lsn       | 0/3000300
+write_lag        |
+flush_lag        |
+replay_lag       |
+sync_priority    | 0
+sync_state       | async
+'''
+
+[[scenario.lines]]
+prompt = "$"
+command = "date +%Y%m%d; exit"
+output = '''
+20250101
+'''

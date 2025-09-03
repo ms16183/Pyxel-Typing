@@ -1,0 +1,41 @@
+# TOML
+
+[meta]
+author = "miu"
+date = "2025-01-01"
+title = "2-1"
+description = "next step"
+
+[scenario]
+randomize = false
+
+[[scenario.lines]]
+prompt = "$"
+command = "sudo su -"
+output = ""
+
+[[scenario.lines]]
+prompt = "#"
+command = "whoami"
+output = '''
+root
+'''
+
+[[scenario.lines]]
+prompt = "#"
+command = "ls -a"
+output = '''
+.
+..
+root.txt
+'''
+
+[[scenario.lines]]
+prompt = "#"
+command = "exit"
+output = ""
+
+[[scenario.lines]]
+prompt = "$"
+command = "exit"
+output = ""

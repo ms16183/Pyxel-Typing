@@ -1,0 +1,54 @@
+# TOML
+
+[meta]
+author = "miu"
+date = "2025-01-01"
+title = "1-1"
+description = "first step"
+
+[scenario]
+randomize = false
+
+[[scenario.lines]]
+prompt = "$"
+command = "sudo su -"
+output = ""
+
+[[scenario.lines]]
+prompt = "#"
+command = "whoami"
+output = '''
+root 
+'''
+
+[[scenario.lines]]
+prompt = "#"
+command = "ls -a"
+output = '''
+.
+..
+.bash_profile
+.bash_rc
+.gitprofile
+.cache
+.config/
+root.txt
+work/
+projects/
+s3cr3t/
+passwords.txt
+steg.png
+steg.jpg
+steg.gif
+sound.mp3
+'''
+
+[[scenario.lines]]
+prompt = "#"
+command = "exit"
+output = ""
+
+[[scenario.lines]]
+prompt = "$"
+command = "exit"
+output = ""

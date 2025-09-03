@@ -1,0 +1,187 @@
+import pyxel as px
+import random
+import enum
+
+# Scenes
+class STATE(enum.Enum):
+  TITLE = enum.auto()
+  PLAYING = enum.auto()
+  GAMEOVER = enum.auto()
+
+GAME_TIME = 30 * 60
+
+LEVEL = 1
+
+WORDS = [
+  "Nyan Test",
+  "Oh my god",
+  "You are an idiot",
+  "123456",
+  "passw0rd",
+]
+    
+
+class App:
+  
+  def __init__(self):
+
+    self.font = px.Font("assets/font/umplus_j12r.bdf")
+
+    self.state = STATE.TITLE
+    self.input_text = ""
+    self.score = 0
+
+    self.change_state(STATE.TITLE)
+
+    px.init(160, 120, title="typing game", fps=60)
+    px.mouse(True)
+    px.perf_monitor(True)
+    px.run(self.update, self.draw)
+    
+
+  def change_state(self, state) -> None:
+    self.state = state
+
+    print("State changed to:", self.state)
+
+    if state == STATE.TITLE:
+      # 難易度
+      self.level = 1
+      # 入力されたテキスト
+      self.input_text = ""
+      # スコア
+      self.score = 0
+      self.total_characters = 0
+      # タイマ
+      self.timer = GAME_TIME
+      self.minitimer = 10 * 60
+      # 入力するお手本テキスト
+      self.word ="Nyan Init"
+      # shift状態
+      self.shift_mode = False
+
+    if state == STATE.PLAYING:
+      self.word = "Nyan Test"
+
+    if state == STATE.GAMEOVER:
+      pass
+
+
+  def get_new_word(self) -> str:
+    if len(WORDS) > 0:
+      return WORDS.pop(0)
+    return "Nyan"
+    
+  def update(self) -> None:
+    if self.state == STATE.TITLE:
+      self.update_title()
+
+    elif self.state == STATE.PLAYING:
+      self.update_playing()
+      
+    elif self.state == STATE.GAMEOVER:
+      self.update_gameover()
+
+      
+  def update_title(self):
+    if px.btnr(px.KEY_RETURN):
+      self.change_state(STATE.PLAYING)
+
+    elif px.btnr(px.KEY_UP) and self.level < 10:
+      self.level += 1
+
+    elif px.btnr(px.KEY_DOWN) and self.level > 1:
+      self.level -= 1
+
+      
+  def update_playing(self):
+
+    self.timer -= 1
+    self.minitimer -= 1
+
+    self.shift_mode = px.btn(px.KEY_SHIFT)
+
+    # 文字
+    for key in range(ord('a'), ord('z')+1):
+      if px.btnp(key):
+        self.input_text += chr(key).upper() if self.shift_mode else chr(key)
+
+    # 数字
+    for key in range(ord('0'), ord('9')+1):
+      if px.btnp(key):
+        self.input_text += chr(key)
+
+    # 特殊文字
+    #for key in range(ord('0'), ord('9')):
+    #  if px.btnp(key):
+    #    self.input_text += chr(key).upper() if self.shift_mode else chr(key)
+
+    # 空白
+    if px.btnp(px.KEY_SPACE):
+      self.input_text += ' '
+
+    # 削除
+    if px.btnp(px.KEY_BACKSPACE) and len(self.input_text) > 0:
+      self.input_text = self.input_text[:-1]
+
+    # Enterで確定時， 
+    if px.btnp(px.KEY_RETURN):
+      print(" word:", self.word)
+      print("input:", self.input_text)
+      # お手本と同じならば
+      if self.input_text == self.word:
+        # スコア加算
+        self.score += 1 * len(self.word)
+        # 合計入力文字数加算
+        self.total_characters += len(self.word)
+        # 入力をクリア
+        self.input_text = ''
+        # 新しい単語を取り出す
+        self.word = self.get_new_word()
+        self.minitimer = 60 * 10
+
+
+    if self.timer < 0 or self.minitimer < 0:
+      self.change_state(STATE.GAMEOVER)
+
+    
+
+  
+  def update_gameover(self):
+    if px.btnr(px.KEY_RETURN):
+      self.change_state(STATE.TITLE)
+  
+
+  def draw(self) -> None:
+    px.cls(px.COLOR_BLACK)
+    if self.state == STATE.TITLE:
+      self.draw_title()
+
+    elif self.state == STATE.PLAYING:
+      self.draw_playing()
+      
+    elif self.state == STATE.GAMEOVER:
+      self.draw_gameover()
+
+      
+  def draw_title(self):
+    px.text(px.width / 2, px.height / 2, "Typing game", px.COLOR_WHITE)
+    px.text(px.width / 2, px.height * 3 / 4, "Press Enter Key", px.COLOR_WHITE)
+    px.text(px.width / 2, px.height * 4 / 5, f"Level: {self.level}", px.COLOR_WHITE)
+
+
+  def draw_playing(self):
+    px.text(0, px.height / 2, f"$ {self.word}", px.COLOR_WHITE, self.font)
+    px.text(0, px.height / 2, f"$ {self.input_text}", px.COLOR_RED, self.font)
+
+    px.rect(0, 0, int(px.width * self.minitimer / (10*60)), 10, px.COLOR_ORANGE)
+  
+
+  def draw_gameover(self):
+    px.text(px.width / 2, px.height / 2, "Gameover", px.COLOR_WHITE)
+  
+
+
+if __name__ == '__main__':
+  print("Creating app.")
+  app = App()
