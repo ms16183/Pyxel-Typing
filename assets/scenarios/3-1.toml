@@ -1,0 +1,56 @@
+# TOML
+
+[meta]
+author = "miu"
+date = "2025-01-01"
+title = "3-1"
+description = "basic commands for beginner"
+
+[scenario]
+randomize = true
+
+[[scenario.lines]]
+prompt = "$"
+command = "whoami"
+output = "user"
+[[scenario.lines]]
+prompt = "$"
+command = "pwd"
+output = "/home/user"
+[[scenario.lines]]
+prompt = "$"
+command = "ls"
+output = "hello.txt"
+[[scenario.lines]]
+prompt = "$"
+command = "ls -a"
+output = ".   ..    hello.txt    .hidden.txt"
+[[scenario.lines]]
+prompt = "$"
+command = "ls -la"
+output = '''
+drwxr-xr-x 2 user user 4096 Dec 23 13:14 .
+drwxr-xr-x 2 root root 4096 Dec 23 13:15 ..
+-rw-r--r-- 1 user user   36 Dec 23 13:12 hello.txt
+-rw-r--r-- 1 user user   36 Dec 23 13:07 .hidden.txt
+'''
+[[scenario.lines]]
+prompt = "$"
+command = "cat hello.txt"
+output = '''
+Hello!
+'''
+[[scenario.lines]]
+prompt = "$"
+command = "cat .hidden.txt"
+output = '''
+Password is P@ssw0rd
+'''
+[[scenario.lines]]
+prompt = "$"
+command = "cat /etc/passwd | grep user | cut -d: -f1"
+output = "user"
+[[scenario.lines]]
+prompt = "$"
+command = "exit"
+output = ""

@@ -4,7 +4,7 @@
 author = "miu"
 date = "2025-01-01"
 title = "2-1"
-description = "next step"
+description = "Run Apache!"
 
 [scenario]
 randomize = false
@@ -16,24 +16,56 @@ output = ""
 
 [[scenario.lines]]
 prompt = "#"
-command = "whoami"
+command = "uname -n; whoami; pwd; date"
 output = '''
+WebServer
 root
+/root
+2025-03-01 00:06:53
 '''
 
 [[scenario.lines]]
 prompt = "#"
-command = "ls -a"
+command = "systemctl status apache"
 output = '''
-.
-..
-root.txt
+● httpd.service - The Apache HTTP Server
+  Loaded: loaded (/usr/lib/systemd/system/httpd.service; disabled; vendor preset: disabled)
+  Active: inactive (dead)
+  Docs: man:httpd(8)
+  man:apachectl(8)
+'''
+
+[[scenario.lines]]
+prompt = "#"
+command = "systemctl start apache; echo $?"
+output = '''
+0
+'''
+
+[[scenario.lines]]
+prompt = "#"
+command = "systemctl status apache"
+output = '''
+● httpd.service - The Apache HTTP Server
+  Loaded: loaded (/usr/lib/systemd/system/httpd.service; disabled; vendor preset: disabled)
+  Active: active (running) since 2025-03-01 00:07:18 JST;
+  Main PID: 1102
+  ...
+'''
+
+[[scenario.lines]]
+prompt = "#"
+command = "ps -ef | grep httpd"
+output = '''
+http    1102     1    0 12PM ??    0:02.19 /usr/sbin/httpd -D FOREGROUND
+http   23141 23482    0 12PM ??    0:00.00 grep httpd
 '''
 
 [[scenario.lines]]
 prompt = "#"
 command = "exit"
-output = ""
+output = '''
+'''
 
 [[scenario.lines]]
 prompt = "$"
