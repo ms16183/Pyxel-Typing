@@ -48,7 +48,7 @@ class TitleScene(Scene):
     stage_title = stage['meta']['title']
     stage_description = stage['meta']['description']
 
-    px.text(0, 12*0, f"タイトル", px.COLOR_WHITE, self.font)
+    px.text(0, 12*0, f"Linux Typing", px.COLOR_WHITE, self.font)
     px.text(0, 12*1, f"ステージ選択(← →)", px.COLOR_WHITE, self.font)
     px.text(0, 12*2, f"ステージ: {stage_title}", px.COLOR_WHITE, self.font)
     px.text(0, 12*3, f"説明: {stage_description}", px.COLOR_WHITE, self.font)
