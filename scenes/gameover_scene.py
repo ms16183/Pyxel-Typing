@@ -47,8 +47,7 @@ class GameoverScene(Scene):
 
     # スコア = (正しい打鍵数 - 誤った打鍵数) / 合計打鍵数
     self.sum_characters = sum([len(l['command']) for l in self.lines if l is not None])
-    self.score = int((self.ok_characters - self.ng_characters) * 100 / self.sum_characters)
-
+    self.score = int(max(self.ok_characters - self.ng_characters, 0) * 100 / self.sum_characters)
   
   def update(self):
     if px.btnp(px.KEY_RETURN):
